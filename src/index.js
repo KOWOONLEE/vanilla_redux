@@ -1,5 +1,3 @@
-import { toHaveDescription } from "@testing-library/jest-dom/dist/matchers";
-import { formDataToBlob } from "formdata-polyfill/esm.min";
 import { createStore } from "redux";
 
 const add = document.getElementById("add");
@@ -55,6 +53,20 @@ const ul = document.querySelector("ul");
 
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
+
+const addToDo = (text) => {
+  return {
+    type: ADD_TODO,
+    text,
+  };
+};
+
+const deleteToDo = (id) => {
+  return {
+    type: DELETE_TODO,
+    id,
+  };
+};
 const reducer = (state = [], action) => {
   switch (action.type) {
     case ADD_TODO:
@@ -73,14 +85,14 @@ store.subscribe(() => {
   console.log(store.getState());
 });
 
-const addToDo = (text) => {
-  store.dispatch({ type: ADD_TODO, text });
+const dispatchAddToDo = (text) => {
+  store.dispatch(addToDo(text));
 };
 
 //parentNode를 알아야함. 왜냐면 삭제할 todo의 id가 필요하기 때문
-const deleteToDo = (e) => {
+const dispatchDeleteToDo = (e) => {
   const id = e.target.parentNode.id;
-  store.dispatch({ type: DELETE_TODO, id });
+  store.dispatch(deleteToDo(id));
 };
 
 const paintToDos = () => {
@@ -93,7 +105,7 @@ const paintToDos = () => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.innerText = "DEL";
-    btn.addEventListener("click", deleteToDo);
+    btn.addEventListener("click", dispatchDeleteToDo);
     li.id = toDo.id;
     li.innerText = toDo.text;
     li.appendChild(btn);
@@ -107,6 +119,6 @@ const onSubmit = (e) => {
   e.preventDefault();
   const toDo = input.value;
   input.value = "";
-  addToDo(toDo);
+  dispatchAddToDo(toDo);
 };
 form.addEventListener("submit", onSubmit);
