@@ -44,7 +44,7 @@ const handleMinus = () => {
 };
 add.addEventListener("click", handleAdd);
 minus.addEventListener("click", handleMinus);
-
+// 블로그 작성 완료~~
 // ========================================
 
 const form = document.querySelector("form");
@@ -74,7 +74,7 @@ const reducer = (state = [], action) => {
       //...state를 뒤로 보내서 array 가 보이는 방식을 수정할 수 있음.
       return [{ text: action.text, id: Date.now() }, ...state];
     case DELETE_TODO:
-      return [];
+      return state.filter((toDo) => toDo.id !== action.id);
     default:
       return state;
   }
@@ -91,7 +91,7 @@ const dispatchAddToDo = (text) => {
 
 //parentNode를 알아야함. 왜냐면 삭제할 todo의 id가 필요하기 때문
 const dispatchDeleteToDo = (e) => {
-  const id = e.target.parentNode.id;
+  const id = parseInt(e.target.parentNode.id);
   store.dispatch(deleteToDo(id));
 };
 
